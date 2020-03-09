@@ -1,0 +1,1 @@
+Modified version of https://cults3d.com/en/3d-model/game/collectible-pokemon-card-storage-box
