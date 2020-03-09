@@ -1,6 +1,8 @@
-cardWidth=63.5;
-cardHeight=88.5;
-cardThickness=0.34;
+cardWidth=65.5;
+cardHeight=90.5;
+cardThickness=0.38;
+
+boxHeight = cardHeight*0.75;
 
 cardPerBox=500;
 cardBlockLength=cardThickness*cardPerBox;
@@ -8,7 +10,7 @@ cardBlockLength=cardThickness*cardPerBox;
 spaceAroundCard=0.25;
 spaceAroundLid=0.5;
 
-wallthickness=0.96;
+wallthickness=2;
 
 fingerCutout=30;
 
@@ -150,22 +152,24 @@ module mainBox () {
         translate([
             (cardWidth+(spaceAroundCard*2)+(wallthickness*2))/2,
             cardBlockLength+(spaceAroundCard*2)+(wallthickness*3),
-            cardHeight+spaceAroundCard+wallthickness
+            boxHeight+spaceAroundCard+wallthickness
             ]){
             rotate(a=[90,0,0]){
                 cylinder(h=(cardBlockLength+(spaceAroundCard*2)+(wallthickness*4)),d=fingerCutout);
             }
         }
         translate([
-            (cardWidth+(spaceAroundCard*2)+(wallthickness*2))*(3/2),
+            (cardWidth+(spaceAroundCard*2)+(wallthickness))*(3/2),
             cardBlockLength+(spaceAroundCard*2)+(wallthickness*3),
-            cardHeight+spaceAroundCard+wallthickness
+            boxHeight+spaceAroundCard+wallthickness
             ]){
             rotate(a=[90,0,0]){
                 cylinder(h=(cardBlockLength+(spaceAroundCard*2)+(wallthickness*4)),d=fingerCutout);
             }
         }
+        Notches();
     }
+    
 }
 
 
@@ -174,28 +178,28 @@ module Box () {
         cube([
         cardWidth+(spaceAroundCard*2)+(wallthickness*2),
         cardBlockLength+(spaceAroundCard*2)+(wallthickness*2),
-        cardHeight+spaceAroundCard+wallthickness
+        boxHeight+spaceAroundCard+wallthickness
         ]);
         translate([wallthickness,wallthickness,wallthickness]) {
             cube([
             cardWidth+(spaceAroundCard*2),
             cardBlockLength+(spaceAroundCard*2),
-            cardHeight+spaceAroundCard+wallthickness
+            boxHeight+spaceAroundCard+wallthickness
             ]);
         }
     }
-    translate([cardWidth+wallthickness*2,0,0]) {
+    translate([cardWidth+wallthickness,0,0]) {
     difference() {
         cube([
         cardWidth+(spaceAroundCard*2)+(wallthickness*2),
         cardBlockLength+(spaceAroundCard*2)+(wallthickness*2),
-        cardHeight+spaceAroundCard+wallthickness
+        boxHeight+spaceAroundCard+wallthickness
         ]);
         translate([wallthickness,wallthickness,wallthickness]) {
             cube([
             cardWidth+(spaceAroundCard*2),
             cardBlockLength+(spaceAroundCard*2),
-            cardHeight+spaceAroundCard+wallthickness
+            boxHeight+spaceAroundCard+wallthickness
             ]);
         }
     }
@@ -208,7 +212,7 @@ module mainLid () {
         translate([
             -spaceAroundLid,
             (cardBlockLength+(spaceAroundCard*2)+(wallthickness*4)+(spaceAroundLid*2))/2,
-            cardHeight+spaceAroundCard+(wallthickness*2)+(spaceAroundLid)
+            boxHeight+spaceAroundCard+(wallthickness*2)+(spaceAroundLid)
             ]){
             rotate(a=[0,90,0]){
                 cylinder(h=cardWidth*2+(spaceAroundCard*2)+(wallthickness*5)+(spaceAroundLid*4),d=fingerCutout);
@@ -224,13 +228,13 @@ module LidBox () {
         cube([
         cardWidth*2+(spaceAroundCard*2)+(wallthickness*5)+(spaceAroundLid*2),
         cardBlockLength+(spaceAroundCard*2)+(wallthickness*4)+(spaceAroundLid*2),
-        cardHeight+spaceAroundCard+(wallthickness*2)+(spaceAroundLid)
+        boxHeight+spaceAroundCard+(wallthickness*2)+(spaceAroundLid)
         ]);
         translate([wallthickness,wallthickness,wallthickness]) {
             cube([
             cardWidth*2+(spaceAroundCard*2)+(wallthickness*3)+(spaceAroundLid*2),
             cardBlockLength+(spaceAroundCard*2)+(wallthickness*2)+(spaceAroundLid*2),
-            cardHeight+spaceAroundCard+(wallthickness*2)+(spaceAroundLid)
+            boxHeight+spaceAroundCard+(wallthickness*2)+(spaceAroundLid)
             ]);
         }
     }
@@ -239,14 +243,27 @@ module LidBox () {
 module Logo () {
         
     boxwidth=cardWidth*2+(spaceAroundCard*2)+(wallthickness*5)+(spaceAroundLid*2);
+    logoSize = boxwidth/2;
     translate([((boxwidth/2)/2)+(boxwidth/2),wallthickness/2,boxwidth/1.5]) {
         rotate(a=[90,180,0]){
-            resize([boxwidth/2,boxwidth/2,wallthickness/2]) {
+            resize([logoSize,logoSize,wallthickness/2]) {
                 linear_extrude(height = 4) import(logoFile);
             }
         }
+    }   
+}
+
+module Notches() {
+    cardCount = 60;
+    distanceBetweenNotches = cardThickness * cardCount;
+    notchCount = cardBlockLength / distanceBetweenNotches;
+    notchSize = 2;
+
+    for (i = [0:2]){
+        for (j = [1:notchCount]){
+            translate([(cardWidth+(wallthickness))*i-1,distanceBetweenNotches*j,boxHeight ]){
+                cube(wallthickness+2,1,1);
+            }
+        }
     }
-     
-    
-    
 }
