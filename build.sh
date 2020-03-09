@@ -1,0 +1,1 @@
+openscad Pokemon_Double_Card_Box_with_Logo.scad -o Pokemon_Double_Card_Box_with_Logo.stl --render
